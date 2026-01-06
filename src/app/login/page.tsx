@@ -14,7 +14,13 @@ export default function LoginPage() {
     const handleLogin = async (provider: string, options?: any) => {
         try {
             setIsLoading(provider)
-            await signIn(provider, { callbackUrl: "/admin", ...options })
+            // Default to home, but if admin credentials, maybe redirect to admin?
+            // Actually, safer to always go to home, and let Admin click "Admin Panel" link if they want.
+            // OR checks the role? No, client side doesn't know role yet.
+            // Simple fix: Redirect all to "/" (Home).
+            // If they are admin, they can navigate to /admin from there.
+            const destination = (options?.username === "admin") ? "/admin" : "/"
+            await signIn(provider, { callbackUrl: destination, ...options })
         } catch (error) {
             console.error(error)
         } finally {
