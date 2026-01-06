@@ -42,7 +42,7 @@ export default function LoginPage() {
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/5 border border-green-500/20 mb-4 shadow-inner ring-1 ring-white/5">
                             <Gamepad2 className="w-8 h-8 text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)]" />
                         </div>
-                        <h1 className="text-3xl font-bold tracking-tight text-white">LF BET</h1>
+                        <h1 className="text-3xl font-bold tracking-tight text-white">Lucky Fish Bet</h1>
                         <p className="text-zinc-400 text-sm">Los Santos'un En Güvenilir Bahis Platformu</p>
                     </div>
 
