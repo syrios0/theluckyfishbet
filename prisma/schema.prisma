@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid()) // GTA World Character ID / UUID
+  username  String   @unique
+  balance   Decimal  @default(0.00)
+  role      String     @default("USER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bets         Bet[]
+  transactions Transaction[]
+}
+
+model Match {
+  id        String      @id @default(uuid())
+  teamA     String
+  teamALogo String? // URL to team A logo
+  teamB     String
+  teamBLogo String? // URL to team B logo
+  startTime DateTime
+  
+  sport     String @default("FOOTBALL") // FOOTBALL, BASKETBALL
+  overUnderLine Decimal @default(2.5)   // 2.5, 210.5 etc.
+
+  status    String @default("PENDING")
+  result    String? // e.g., "2-1" or "WIN_A"
+  scoreA    Int?
+  scoreB    Int?
+  
+  oddsA     Decimal
+  oddsB     Decimal
+  oddsDraw  Decimal?
+  oddsOver   Decimal?
+  oddsUnder  Decimal?
+  oddsHomeOver Decimal? // Home Team > 1.5
+  oddsAwayOver Decimal? // Away Team > 1.5
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? // For soft delete (archiving)
+
+  bets Bet[]
+}
+
+model Bet {
+  id              String    @id @default(uuid())
+  userId          String
+  matchId         String
+  amount          Decimal
+  choice          String
+  status          String @default("OPEN")
+  potentialPayout Decimal
+  
+  createdAt       DateTime  @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  match Match @relation(fields: [matchId], references: [id])
+}
+
+model Transaction {
+  id        String          @id @default(uuid())
+  userId    String
+  amount    Decimal
+  type      String       // DEPOSIT, WITHDRAW_REQUEST, WITHDRAW_COMPLETED, BET_WIN, BET_REFUND
+  status    String       @default("COMPLETED") // PENDING, COMPLETED, FAILED, REJECTED
+  timestamp DateTime     @default(now())
+  reference String?      // External ID or relevant Bet ID
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+
