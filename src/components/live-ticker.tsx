@@ -28,7 +28,7 @@ export function LiveTicker() {
                         <span className="text-zinc-700">|</span>
                         <span className="text-blue-400">🔥 Yüksek Oranlar</span>
                         <span className="text-zinc-700">|</span>
-                        <span>İlk Yatırıma %10 Bonus!</span>
+                        <span>Canlı Bahis Keyfi</span>
                         <span className="text-zinc-700">|</span>
                     </div>
                 ))}
