@@ -16,7 +16,7 @@ export default async function Home() {
 
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center space-y-6">
           <Badge variant="outline" className="text-green-400 border-green-500/50 bg-green-500/10 px-4 py-1 text-sm uppercase tracking-widest">
-            The Lucky Fish
+            LF BET
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">
             Kazanmaya Başla
