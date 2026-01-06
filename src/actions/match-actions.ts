@@ -160,6 +160,41 @@ export async function createMatch(data: MatchFormData) {
     }
 }
 
+export async function updateMatch(matchId: string, data: MatchFormData) {
+    const session = await auth()
+
+    if (session?.user?.role !== "ADMIN") {
+        return { success: false, error: "Yetkisiz işlem." }
+    }
+
+    try {
+        await prisma.match.update({
+            where: { id: matchId },
+            data: {
+                teamA: data.teamA,
+                teamB: data.teamB,
+                teamALogo: data.teamALogo,
+                teamBLogo: data.teamBLogo,
+                startTime: data.startTime,
+                oddsA: parseFloat(data.oddsA),
+                oddsB: parseFloat(data.oddsB),
+                oddsDraw: data.oddsDraw ? parseFloat(data.oddsDraw) : null,
+                oddsOver: data.oddsOver ? parseFloat(data.oddsOver) : null,
+                oddsUnder: data.oddsUnder ? parseFloat(data.oddsUnder) : null,
+                oddsHomeOver: data.oddsHomeOver ? parseFloat(data.oddsHomeOver) : null,
+                oddsAwayOver: data.oddsAwayOver ? parseFloat(data.oddsAwayOver) : null,
+                sport: data.sport,
+                overUnderLine: parseFloat(data.overUnderLine),
+            }
+        })
+        revalidatePath("/admin/matches")
+        return { success: true }
+    } catch (error) {
+        console.error("Failed to update match:", error)
+        return { success: false, error: String(error) }
+    }
+}
+
 export async function resultMatch(matchId: string, resultScore: string) {
     const session = await auth()
     if (session?.user?.role !== "ADMIN") {

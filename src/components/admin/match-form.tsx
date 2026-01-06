@@ -22,8 +22,8 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { createMatch } from "@/actions/match-actions"
-import { useState } from "react"
+import { createMatch, updateMatch } from "@/actions/match-actions"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
@@ -53,7 +53,7 @@ const formSchema = z.object({
     overUnderLine: z.string(),
 })
 
-export function MatchForm({ onSuccess }: { onSuccess?: () => void }) {
+export function MatchForm({ onSuccess, initialData, matchId }: { onSuccess?: () => void, initialData?: any, matchId?: string }) {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const router = useRouter()
@@ -61,26 +61,34 @@ export function MatchForm({ onSuccess }: { onSuccess?: () => void }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            teamA: "",
-            teamB: "",
-            teamALogo: "",
-            teamBLogo: "",
-            startTime: "",
-            oddsA: "1.00",
-            oddsB: "1.00",
-            oddsDraw: "1.00",
-            oddsOver: "1.70",
-            oddsUnder: "1.70",
-            oddsHomeOver: "2.50",
-            oddsAwayOver: "2.50",
-            sport: "FOOTBALL",
-            overUnderLine: "2.5",
+            teamA: initialData?.teamA || "",
+            teamB: initialData?.teamB || "",
+            teamALogo: initialData?.teamALogo || "",
+            teamBLogo: initialData?.teamBLogo || "",
+            startTime: initialData?.startTime ? new Date(initialData.startTime).toISOString().slice(0, 16) : "",
+            oddsA: initialData?.oddsA?.toString() || "1.00",
+            oddsB: initialData?.oddsB?.toString() || "1.00",
+            oddsDraw: initialData?.oddsDraw?.toString() || "1.00",
+            oddsOver: initialData?.oddsOver?.toString() || "1.70",
+            oddsUnder: initialData?.oddsUnder?.toString() || "1.70",
+            oddsHomeOver: initialData?.oddsHomeOver?.toString() || "2.50",
+            oddsAwayOver: initialData?.oddsAwayOver?.toString() || "2.50",
+            sport: initialData?.sport || "FOOTBALL",
+            overUnderLine: initialData?.overUnderLine?.toString() || "2.5",
         },
     })
 
     const [hasDraw, setHasDraw] = useState(true)
     const [hasOverUnder, setHasOverUnder] = useState(true)
     const [hasTeamProps, setHasTeamProps] = useState(true)
+
+    useEffect(() => {
+        if (initialData) {
+            if (!initialData.oddsDraw) setHasDraw(false)
+            if (!initialData.oddsOver) setHasOverUnder(false)
+            if (!initialData.oddsHomeOver) setHasTeamProps(false)
+        }
+    }, [initialData])
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true)
@@ -99,13 +107,21 @@ export function MatchForm({ onSuccess }: { onSuccess?: () => void }) {
         }
 
         try {
-            const result = await createMatch({
-                ...finalValues,
-                startTime: new Date(values.startTime)
-            })
+            let result;
+            if (matchId) {
+                result = await updateMatch(matchId, {
+                    ...finalValues,
+                    startTime: new Date(values.startTime)
+                })
+            } else {
+                result = await createMatch({
+                    ...finalValues,
+                    startTime: new Date(values.startTime)
+                })
+            }
 
             if (result.success) {
-                form.reset()
+                if (!matchId) form.reset()
                 onSuccess?.()
                 router.refresh()
             } else {
@@ -369,7 +385,7 @@ export function MatchForm({ onSuccess }: { onSuccess?: () => void }) {
                 )}
 
                 <Button type="submit" disabled={isLoading} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                    {isLoading ? "Oluşturuluyor..." : "Maç Oluştur"}
+                    {isLoading ? "İşleniyor..." : (matchId ? "Maçı Güncelle" : "Maç Oluştur")}
                 </Button>
             </form>
         </Form >

@@ -11,7 +11,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Card, CardContent } from "@/components/ui/card"
-import { Plus, Trash2, Archive, RotateCcw } from "lucide-react"
+import { Plus, Trash2, Archive, RotateCcw, Pencil } from "lucide-react"
 import Link from "next/link"
 
 export default async function MatchesPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
@@ -103,12 +103,32 @@ export default async function MatchesPage({ searchParams }: { searchParams: Prom
                                     </div>
 
                                     <div className="flex items-center gap-2">
+
                                         {!isArchived && match.status !== 'ENDED' && (
-                                            <MatchResultDialog
-                                                matchId={match.id}
-                                                teamA={match.teamA}
-                                                teamB={match.teamB}
-                                            />
+                                            <>
+                                                <Dialog>
+                                                    <DialogTrigger asChild>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-blue-500 hover:bg-blue-500/10">
+                                                            <Pencil className="h-4 w-4" />
+                                                        </Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent className="bg-zinc-950 border-zinc-800 text-white sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+                                                        <DialogHeader>
+                                                            <DialogTitle>Maçı Düzenle</DialogTitle>
+                                                            <DialogDescription className="text-zinc-400">
+                                                                Mevcut maç bilgilerini güncelleyin.
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                        <MatchForm matchId={match.id} initialData={match} />
+                                                    </DialogContent>
+                                                </Dialog>
+
+                                                <MatchResultDialog
+                                                    matchId={match.id}
+                                                    teamA={match.teamA}
+                                                    teamB={match.teamB}
+                                                />
+                                            </>
                                         )}
                                         <div className={`px-2 py-1 rounded text-xs font-bold 
                                             ${match.status === 'PENDING' ? 'bg-yellow-500/10 text-yellow-500' :
