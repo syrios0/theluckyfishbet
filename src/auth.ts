@@ -87,12 +87,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
         async authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user
-            const isOnDashboard = nextUrl.pathname.startsWith('/admin')
+            const isOnLoginPage = nextUrl.pathname.startsWith('/login')
+            const isStaticAsset = nextUrl.pathname.startsWith('/_next') || nextUrl.pathname.includes('.')
 
-            if (isOnDashboard) {
-                if (isLoggedIn && auth.user.role === 'ADMIN') return true
-                return false // Redirect to login
+            if (isStaticAsset) return true
+
+            if (isOnLoginPage) {
+                if (isLoggedIn) return Response.redirect(new URL('/', nextUrl))
+                return true
             }
+
+            if (!isLoggedIn) return false
+
+            const isOnDashboard = nextUrl.pathname.startsWith('/admin')
+            if (isOnDashboard) {
+                if (auth.user.role === 'ADMIN') return true
+                return Response.redirect(new URL('/', nextUrl))
+            }
+
             return true
         }
     },
