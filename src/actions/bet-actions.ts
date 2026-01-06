@@ -30,8 +30,8 @@ export async function placeBet(matchId: string, choice: "HOME" | "DRAW" | "AWAY"
         return { success: false, error: "Giriş yapmalısınız." }
     }
 
-    if (amount < 500 || amount > 5000) {
-        return { success: false, error: "Bahis tutarı $500 ile $5000 arasında olmalıdır." }
+    if (amount < 1000 || amount > 10000) {
+        return { success: false, error: "Bahis tutarı $1000 ile $10000 arasında olmalıdır." }
     }
 
     try {

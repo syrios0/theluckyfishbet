@@ -143,7 +143,7 @@ export function BetModal({ matchId, teamA, teamB, choice, odds, line = 2.5, disa
 
                     {/* Amount Input */}
                     <div className="space-y-2">
-                        <Label htmlFor="amount" className="text-zinc-300">Bahis Tutarı ($)</Label>
+                        <Label htmlFor="amount" className="text-zinc-300">Bahis Tutarı ($1.000 - $10.000)</Label>
                         <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
                             <Input
