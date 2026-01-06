@@ -3,6 +3,7 @@ import { BetModal } from "@/components/bet-modal"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { CalendarDays, Clock, Trophy } from "lucide-react"
+import { LiveTicker } from "@/components/live-ticker"
 
 export default async function Home() {
   const matches = await getActiveMatches()
@@ -16,10 +17,10 @@ export default async function Home() {
 
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center space-y-6">
           <Badge variant="outline" className="text-green-400 border-green-500/50 bg-green-500/10 px-4 py-1 text-sm uppercase tracking-widest">
-            LF BET
+            Always Lucky
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">
-            Kazanmaya Başla
+            Lucky Fish Bet
           </h1>
 
           <p className="text-zinc-400 max-w-2xl text-lg md:text-xl font-light">
@@ -28,6 +29,8 @@ export default async function Home() {
           </p>
         </div>
       </div>
+
+      <LiveTicker />
 
       {/* Match List Section */}
       <div className="container mx-auto px-4 py-16">
