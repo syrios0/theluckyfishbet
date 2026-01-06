@@ -56,7 +56,9 @@ export default async function Home() {
                       <Clock className="w-4 h-4" />
                       <span>{new Date(match.startTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
                       <span className="w-1 h-1 bg-zinc-700 rounded-full" />
-                      <span className="text-xs font-bold text-zinc-400">{match.sport === 'BASKETBALL' ? 'BASKETBOL' : 'FUTBOL'}</span>
+                      <span className="text-xs font-bold text-zinc-400">
+                        {match.sport === 'BASKETBALL' ? 'BASKETBOL' : match.sport === 'WFC' ? 'WFC (DÖVÜŞ)' : 'FUTBOL'}
+                      </span>
                     </div>
                     {match.status === 'LIVE' && (
                       <div className="flex items-center gap-1.5 text-red-500 animate-pulse">
@@ -147,7 +149,7 @@ export default async function Home() {
                       </div>
                     )}
                     {/* Team Specific Goal Options (Only if Football and odds exist) */}
-                    {match.sport !== "BASKETBALL" && match.oddsHomeOver && match.oddsAwayOver && (
+                    {match.sport === 'FOOTBALL' && match.oddsHomeOver && match.oddsAwayOver && (
                       <div className="grid grid-cols-2 gap-3">
                         <BetModal
                           matchId={match.id}
@@ -167,7 +169,7 @@ export default async function Home() {
                     )}
 
                     {/* KG Var Options (Only if Football and odds exist) */}
-                    {match.sport !== "BASKETBALL" && match.oddsBothTeamsScoreYes && match.oddsBothTeamsScoreNo && (
+                    {match.sport === 'FOOTBALL' && match.oddsBothTeamsScoreYes && match.oddsBothTeamsScoreNo && (
                       <div className="grid grid-cols-2 gap-3">
                         <BetModal
                           matchId={match.id}
