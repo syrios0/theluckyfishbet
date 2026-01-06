@@ -21,6 +21,9 @@ export default async function Home() {
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">
             Kazanmaya Başla
           </h1>
+          <div className="bg-red-600/20 border border-red-500 text-red-100 px-4 py-2 rounded-lg font-mono animate-pulse">
+            SİSTEM DURUMU: GUEST LOGIN ACTIVE (v2)
+          </div>
           <p className="text-zinc-400 max-w-2xl text-lg md:text-xl font-light">
             Şehrin en yüksek oranları ve en güvenilir bahis platformu.
             Maçları takip et, bahsini yap ve kazanmanın tadını çıkar.
