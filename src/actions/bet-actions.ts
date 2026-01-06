@@ -72,6 +72,15 @@ export async function placeBet(matchId: string, choice: "HOME" | "DRAW" | "AWAY"
                 throw new Error("Bahisler kapalı.")
             }
 
+            // Time Rule: 30 minutes before start
+            const now = new Date()
+            const timeDiff = match.startTime.getTime() - now.getTime()
+            const thirtyMinutesInMs = 30 * 60 * 1000
+
+            if (timeDiff < thirtyMinutesInMs) {
+                throw new Error("Maça 30 dakikadan az kaldığı için bahisler kapanmıştır.")
+            }
+
             // Determine Odds
             let odds: any = match.oddsA // Default to something, updated below
             if (choice === "HOME") odds = match.oddsA
