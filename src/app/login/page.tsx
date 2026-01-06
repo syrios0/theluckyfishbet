@@ -46,7 +46,7 @@ export default function LoginPage() {
                             <span className="w-full border-t border-zinc-800" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-zinc-950 px-2 text-zinc-500">Misafir Girişi</span>
+                            <span className="bg-zinc-950 px-2 text-zinc-500">Misafir Girişi (Aktif)</span>
                         </div>
                     </div>
 
