@@ -29,19 +29,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: "Mock Login (Dev)",
             credentials: {
                 username: { label: "Username", type: "text", placeholder: "admin" },
-                role: { label: "Role", type: "text", placeholder: "ADMIN" } // Helper for dev
+                role: { label: "Role", type: "text", placeholder: "ADMIN" }
             },
             async authorize(credentials) {
-                // Mock Login Logic - ONLY FOR DEVELOPMENT
-                // In production, you would verify against DB, but here we just return a dummy object
                 if (!credentials?.username) return null;
+                const username = credentials.username as string;
 
+                // 1. Try to find real user in DB
+                try {
+                    const { prisma } = await import("@/lib/prisma");
+                    const user = await prisma.user.findUnique({
+                        where: { username }
+                    });
+
+                    if (user) {
+                        return {
+                            id: user.id,
+                            name: user.username,
+                            username: user.username,
+                            role: user.role,
+                            email: `${user.username}@example.com`,
+                            balance: Number(user.balance)
+                        }
+                    }
+                } catch (e) {
+                    console.error("Auth DB lookup failed:", e);
+                }
+
+                // 2. Fallback to Mock User (for dev/admin if not in DB)
                 return {
                     id: "mock-user-uuid-123",
-                    name: credentials.username as string,
-                    username: credentials.username as string,
-                    role: credentials.username === "admin" ? "ADMIN" : "USER",
-                    email: `${credentials.username}@example.com`,
+                    name: username,
+                    username: username,
+                    role: username === "admin" ? "ADMIN" : "USER",
+                    email: `${username}@example.com`,
                     balance: 0
                 }
             }

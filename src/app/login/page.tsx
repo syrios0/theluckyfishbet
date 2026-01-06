@@ -2,12 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState<string | null>(null)
+    const [username, setUsername] = useState("")
 
     const handleLogin = async (provider: string, options?: any) => {
         try {
@@ -44,7 +46,34 @@ export default function LoginPage() {
                             <span className="w-full border-t border-zinc-800" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-zinc-950 px-2 text-zinc-500">Geliştirici Modu</span>
+                            <span className="bg-zinc-950 px-2 text-zinc-500">Misafir Girişi</span>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Input
+                            placeholder="Kullanıcı Adı (Örn: Misafir_1)"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="bg-zinc-900 border-zinc-800"
+                        />
+                        <Button
+                            variant="default"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                            onClick={() => handleLogin("credentials", { username })}
+                            disabled={!!isLoading || !username}
+                        >
+                            {isLoading === "credentials" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Giriş Yap
+                        </Button>
+                    </div>
+
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t border-zinc-800" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-zinc-950 px-2 text-zinc-500">Geliştirici</span>
                         </div>
                     </div>
 
@@ -55,7 +84,7 @@ export default function LoginPage() {
                         disabled={!!isLoading}
                     >
                         {isLoading === "credentials" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Mock Admin Girişi (Test)
+                        Mock Admin Girişi
                     </Button>
                 </CardContent>
             </Card>
