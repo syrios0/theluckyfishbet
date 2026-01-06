@@ -64,9 +64,11 @@ export function ResultsList({ matches }: ResultsListProps) {
                                             </div>
                                             <div className="flex flex-col">
                                                 <div className="font-bold text-white flex items-center gap-2">
+                                                    {match.teamALogo && <img src={match.teamALogo} alt="" className="h-5 w-5 object-contain" />}
                                                     <span className={match.scoreA! > match.scoreB! ? "text-green-400" : "text-zinc-300"}>{match.teamA}</span>
                                                     <span className="text-zinc-600 text-xs">vs</span>
                                                     <span className={match.scoreB! > match.scoreA! ? "text-green-400" : "text-zinc-300"}>{match.teamB}</span>
+                                                    {match.teamBLogo && <img src={match.teamBLogo} alt="" className="h-5 w-5 object-contain" />}
                                                 </div>
                                             </div>
                                         </div>

@@ -78,8 +78,10 @@ export default async function MatchesPage({ searchParams }: { searchParams: Prom
                         <Card key={match.id} className="bg-zinc-950 border-zinc-800">
                             <CardContent className="p-6 flex items-center justify-between">
                                 <div className="space-y-1">
-                                    <div className="font-semibold text-lg text-white">
+                                    <div className="font-semibold text-lg text-white flex items-center gap-2">
+                                        {match.teamALogo && <img src={match.teamALogo} alt="" className="h-6 w-6 object-contain" />}
                                         {match.teamA} <span className="text-zinc-500 text-sm mx-2">vs</span> {match.teamB}
+                                        {match.teamBLogo && <img src={match.teamBLogo} alt="" className="h-6 w-6 object-contain" />}
                                     </div>
                                     <div className="text-sm text-zinc-400">
                                         {new Date(match.startTime).toLocaleString('tr-TR')}

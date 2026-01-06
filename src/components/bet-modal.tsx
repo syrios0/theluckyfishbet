@@ -21,7 +21,7 @@ interface BetModalProps {
     matchId: string
     teamA: string
     teamB: string
-    choice: "HOME" | "DRAW" | "AWAY" | "OVER" | "UNDER" | "HOME_OVER" | "AWAY_OVER"
+    choice: "HOME" | "DRAW" | "AWAY" | "OVER" | "UNDER" | "HOME_OVER" | "AWAY_OVER" | "KG_VAR" | "KG_YOK"
     odds: number
     line?: number
     disabled?: boolean
@@ -56,6 +56,12 @@ export function BetModal({ matchId, teamA, teamB, choice, odds, line = 2.5, disa
     } else if (choice === "UNDER") {
         choiceText = `Alt ${line}`
         selectionName = `Toplam Gol/Sayı Alt (${line})`
+    } else if (choice === "KG_VAR") {
+        choiceText = "KG Var"
+        selectionName = "Karşılıklı Gol Var"
+    } else if (choice === "KG_YOK") {
+        choiceText = "KG Yok"
+        selectionName = "Karşılıklı Gol Yok"
     } else if (choice === "HOME_OVER") {
         choiceText = "Ev Sahibi Üst"
         selectionName = `${teamA} Toplam Gol Üst (1.5)`

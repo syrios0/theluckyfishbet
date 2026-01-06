@@ -62,6 +62,12 @@ export default async function AdminLayout({
                             Finansal İşlemler
                         </Button>
                     </Link>
+                    <Link href="/">
+                        <Button variant="ghost" className="w-full justify-start text-zinc-400 hover:text-green-400 hover:bg-green-900/10 mt-4">
+                            <LogOut className="mr-2 h-4 w-4 rotate-180" />
+                            Siteye Dön
+                        </Button>
+                    </Link>
                 </nav>
 
                 <div className="pt-6 border-t border-zinc-900">

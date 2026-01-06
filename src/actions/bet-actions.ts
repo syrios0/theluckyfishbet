@@ -24,7 +24,7 @@ export async function getAllBets() {
     }
 }
 
-export async function placeBet(matchId: string, choice: "HOME" | "DRAW" | "AWAY" | "OVER" | "UNDER" | "HOME_OVER" | "AWAY_OVER", amount: number) {
+export async function placeBet(matchId: string, choice: "HOME" | "DRAW" | "AWAY" | "OVER" | "UNDER" | "HOME_OVER" | "AWAY_OVER" | "KG_VAR" | "KG_YOK", amount: number) {
     const session = await auth()
     if (!session?.user) {
         return { success: false, error: "Giriş yapmalısınız." }
@@ -81,6 +81,8 @@ export async function placeBet(matchId: string, choice: "HOME" | "DRAW" | "AWAY"
             if (choice === "UNDER") odds = match.oddsUnder
             if (choice === "HOME_OVER") odds = match.oddsHomeOver
             if (choice === "AWAY_OVER") odds = match.oddsAwayOver
+            if (choice === "KG_VAR") odds = match.oddsBothTeamsScoreYes
+            if (choice === "KG_YOK") odds = match.oddsBothTeamsScoreNo
 
             if (!odds) {
                 throw new Error("Bu bahis seçeneği bu maç için aktif değil.")

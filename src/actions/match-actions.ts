@@ -121,6 +121,8 @@ export type MatchFormData = {
     oddsUnder?: string
     oddsHomeOver?: string
     oddsAwayOver?: string
+    oddsBothTeamsScoreYes?: string
+    oddsBothTeamsScoreNo?: string
     sport: string
     overUnderLine: string
 }
@@ -147,6 +149,8 @@ export async function createMatch(data: MatchFormData) {
                 oddsUnder: data.oddsUnder ? parseFloat(data.oddsUnder) : null,
                 oddsHomeOver: data.oddsHomeOver ? parseFloat(data.oddsHomeOver) : null,
                 oddsAwayOver: data.oddsAwayOver ? parseFloat(data.oddsAwayOver) : null,
+                oddsBothTeamsScoreYes: data.oddsBothTeamsScoreYes ? parseFloat(data.oddsBothTeamsScoreYes) : null,
+                oddsBothTeamsScoreNo: data.oddsBothTeamsScoreNo ? parseFloat(data.oddsBothTeamsScoreNo) : null,
                 sport: data.sport,
                 overUnderLine: parseFloat(data.overUnderLine),
                 status: "PENDING"
@@ -183,6 +187,8 @@ export async function updateMatch(matchId: string, data: MatchFormData) {
                 oddsUnder: data.oddsUnder ? parseFloat(data.oddsUnder) : null,
                 oddsHomeOver: data.oddsHomeOver ? parseFloat(data.oddsHomeOver) : null,
                 oddsAwayOver: data.oddsAwayOver ? parseFloat(data.oddsAwayOver) : null,
+                oddsBothTeamsScoreYes: data.oddsBothTeamsScoreYes ? parseFloat(data.oddsBothTeamsScoreYes) : null,
+                oddsBothTeamsScoreNo: data.oddsBothTeamsScoreNo ? parseFloat(data.oddsBothTeamsScoreNo) : null,
                 sport: data.sport,
                 overUnderLine: parseFloat(data.overUnderLine),
             }
@@ -266,6 +272,14 @@ export async function resultMatch(matchId: string, resultScore: string) {
                 // Team Over Logic (Away > 1.5)
                 else if (bet.choice === "AWAY_OVER") {
                     if (scoreAway > 1.5) isWinner = true
+                }
+                // KG Var Logic
+                else if (bet.choice === "KG_VAR") {
+                    if (scoreHome > 0 && scoreAway > 0) isWinner = true
+                }
+                // KG Yok Logic
+                else if (bet.choice === "KG_YOK") {
+                    if (scoreHome === 0 || scoreAway === 0) isWinner = true
                 }
 
                 if (isWinner) {

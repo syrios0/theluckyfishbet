@@ -49,6 +49,8 @@ const formSchema = z.object({
     oddsUnder: z.string().optional(),
     oddsHomeOver: z.string().optional(),
     oddsAwayOver: z.string().optional(),
+    oddsBothTeamsScoreYes: z.string().optional(),
+    oddsBothTeamsScoreNo: z.string().optional(),
     sport: z.string(),
     overUnderLine: z.string(),
 })
@@ -73,6 +75,8 @@ export function MatchForm({ onSuccess, initialData, matchId }: { onSuccess?: () 
             oddsUnder: initialData?.oddsUnder?.toString() || "1.70",
             oddsHomeOver: initialData?.oddsHomeOver?.toString() || "2.50",
             oddsAwayOver: initialData?.oddsAwayOver?.toString() || "2.50",
+            oddsBothTeamsScoreYes: initialData?.oddsBothTeamsScoreYes?.toString() || "1.80",
+            oddsBothTeamsScoreNo: initialData?.oddsBothTeamsScoreNo?.toString() || "1.80",
             sport: initialData?.sport || "FOOTBALL",
             overUnderLine: initialData?.overUnderLine?.toString() || "2.5",
         },
@@ -90,6 +94,18 @@ export function MatchForm({ onSuccess, initialData, matchId }: { onSuccess?: () 
         }
     }, [initialData])
 
+
+    const [hasKG, setHasKG] = useState(true)
+
+    useEffect(() => {
+        if (initialData) {
+            if (!initialData.oddsDraw) setHasDraw(false)
+            if (!initialData.oddsOver) setHasOverUnder(false)
+            if (!initialData.oddsHomeOver) setHasTeamProps(false)
+            if (!initialData.oddsBothTeamsScoreYes) setHasKG(false)
+        }
+    }, [initialData])
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true)
         setError(null)
@@ -104,6 +120,10 @@ export function MatchForm({ onSuccess, initialData, matchId }: { onSuccess?: () 
         if (!hasTeamProps) {
             finalValues.oddsHomeOver = ""
             finalValues.oddsAwayOver = ""
+        }
+        if (!hasKG) {
+            finalValues.oddsBothTeamsScoreYes = ""
+            finalValues.oddsBothTeamsScoreNo = ""
         }
 
         try {
@@ -125,7 +145,7 @@ export function MatchForm({ onSuccess, initialData, matchId }: { onSuccess?: () 
                 onSuccess?.()
                 router.refresh()
             } else {
-                setError(result.error || "Maç oluşturulamadı.")
+                setError(result.error || "İşlem başarısız.")
             }
         } catch (error) {
             console.error(error)
@@ -175,9 +195,12 @@ export function MatchForm({ onSuccess, initialData, matchId }: { onSuccess?: () 
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="text-zinc-400 text-xs">Ev Sahibi Logo URL (Opsiyonel)</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="https://..." className="bg-zinc-900 border-zinc-800 text-white text-xs" {...field} />
-                                </FormControl>
+                                <div className="flex gap-2">
+                                    <FormControl>
+                                        <Input placeholder="https://..." className="bg-zinc-900 border-zinc-800 text-white text-xs" {...field} />
+                                    </FormControl>
+                                    {field.value && <img src={field.value} alt="Logo A" className="h-9 w-9 object-contain rounded bg-white/5 p-1" />}
+                                </div>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -188,9 +211,12 @@ export function MatchForm({ onSuccess, initialData, matchId }: { onSuccess?: () 
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="text-zinc-400 text-xs">Deplasman Logo URL (Opsiyonel)</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="https://..." className="bg-zinc-900 border-zinc-800 text-white text-xs" {...field} />
-                                </FormControl>
+                                <div className="flex gap-2">
+                                    <FormControl>
+                                        <Input placeholder="https://..." className="bg-zinc-900 border-zinc-800 text-white text-xs" {...field} />
+                                    </FormControl>
+                                    {field.value && <img src={field.value} alt="Logo B" className="h-9 w-9 object-contain rounded bg-white/5 p-1" />}
+                                </div>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -369,6 +395,49 @@ export function MatchForm({ onSuccess, initialData, matchId }: { onSuccess?: () 
                                         <FormLabel className="text-blue-400">Deplasman Üst</FormLabel>
                                         <FormControl>
                                             <Input type="number" step="0.01" className="bg-zinc-900 border-blue-900/30 focus:border-blue-500 text-white" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    )}
+                </div>
+
+                <div className="space-y-2 border-t border-zinc-800 pt-4 mt-2">
+                    <div className="flex items-center space-x-2 mb-2">
+                        <Checkbox id="hasKG" checked={hasKG} onCheckedChange={(c) => setHasKG(!!c)} />
+                        <label
+                            htmlFor="hasKG"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-zinc-400"
+                        >
+                            KG Var / Yok
+                        </label>
+                    </div>
+
+                    {hasKG && (
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="oddsBothTeamsScoreYes"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-purple-400">KG Var</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" step="0.01" className="bg-zinc-900 border-purple-900/30 focus:border-purple-500 text-white" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="oddsBothTeamsScoreNo"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-purple-400">KG Yok</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" step="0.01" className="bg-zinc-900 border-purple-900/30 focus:border-purple-500 text-white" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
